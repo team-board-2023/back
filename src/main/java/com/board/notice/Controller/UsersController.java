@@ -26,8 +26,13 @@ public class UsersController {
     }
 
     @PostMapping("users/join")
-    public List<Users> join(@RequestBody Long id, String password, String name, String major){
-        usersService.join(id, password, name, major);
+    public List<Users> join(@RequestBody Users users){
+        Long userid = users.getId();
+        String userpassword = users.getPassword();
+        String username = users.getName();
+        String usermajor = users.getMajor();
+
+        usersService.join(userid, userpassword, username, usermajor);
         return usersService.showAll();
     }
 

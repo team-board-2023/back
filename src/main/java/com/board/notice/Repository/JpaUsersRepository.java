@@ -19,7 +19,7 @@ public class JpaUsersRepository {
         users.setName(name);
         users.setMajor(major);
 
-        em.persist(users);                  // 디비에 저장
+        em.merge(users);                  // 디비에 저장
         return users;
     }
 

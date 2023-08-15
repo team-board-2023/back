@@ -42,7 +42,7 @@ public class UsersService {
 
     @Transactional
     public void join(Long id, String password, String name, String major){
-        validateDuplicateUser(id, password, name, major);
+        // validateDuplicateUser(id, password, name, major);
 
         jpaUsersRepository.save(id, password, name, major);
     }
