@@ -41,14 +41,14 @@ public class UsersService {
     }
 
     @Transactional
-    public void join(Long id, String password, String name, String major){
-        // validateDuplicateUser(id, password, name, major);
+    public void join(UsersJoinForm usersJoinForm){
+        // validateDuplicateUser(usersJoinForm);
 
-        jpaUsersRepository.save(id, password, name, major);
+        jpaUsersRepository.save(usersJoinForm);
     }
 
-    private void validateDuplicateUser(Long id, String password, String name, String major) {
-        jpaUsersRepository.findById(id)
+    private void validateDuplicateUser(UsersJoinForm usersJoinForm) {
+        jpaUsersRepository.findById(usersJoinForm.getId())
                 .ifPresent(m -> {                  // NUll이 아닌 값이 있으면 동작( Optional이기에 가능, 아니었다면 ifNull )
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
@@ -58,7 +58,8 @@ public class UsersService {
         return jpaUsersRepository.findAll();
     }
 
-    public Optional<Long> findId(Long id){ return jpaUsersRepository.findById(id);}
+    public Optional<Long> findId(Long id){ return jpaUsersRepository.findById(id)
+                                            .map(Users::getId);}
     public Optional<String> findPassword(Long id){ return jpaUsersRepository.findByPassword(id);}
     public Optional<String> findName(Long id){ return jpaUsersRepository.findByName(id);}
     public Optional<String> findMajor(Long id){ return jpaUsersRepository.findByMajor(id);}

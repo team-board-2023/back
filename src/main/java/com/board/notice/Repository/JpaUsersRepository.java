@@ -3,29 +3,31 @@ package com.board.notice.Repository;
 import com.board.notice.Form.UsersJoinForm;
 import com.board.notice.Entity.Users;
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class JpaUsersRepository {
     private final EntityManager em;
     public JpaUsersRepository(EntityManager em){ this.em = em; }
 
 
-    public Users save(Long id, String password, String name, String major){
+    public Users save(UsersJoinForm usersJoinForm){
         Users users = new Users();
-        users.setId(id);
-        users.setPassword(password);
-        users.setName(name);
-        users.setMajor(major);
+        users.setId(usersJoinForm.getId());
+        users.setPassword(usersJoinForm.getPassword());
+        users.setName(usersJoinForm.getName());
+        users.setMajor(usersJoinForm.getMajor() );
 
         em.merge(users);                  // 디비에 저장
         return users;
     }
 
-    public Optional<Long> findById(Long id){
-        Long ID = em.find(Long.class, id);
-        return Optional.ofNullable(ID);
+    public Optional<Users> findById(Long id){
+        Users users = em.find(Users.class, id);
+        return Optional.ofNullable(users);
     }
     public Optional<String> findByPassword(Long id) {
         List<String> result = em.createQuery("select u.password from Users u where u.id = :id", String.class)
