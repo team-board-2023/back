@@ -1,5 +1,6 @@
 package com.board.notice.Repository;
 
+import com.board.notice.DTO.BoardDTO;
 import com.board.notice.Entity.Board;
 import com.board.notice.Entity.CommentList;
 import com.board.notice.Form.BoardForm;
@@ -58,12 +59,28 @@ public class BoardRepository {
                 });
     }
 
-    public List<CommentList> showComment(ShowCommentForm showCommentForm){
+    public List<BoardDTO> showAll(){
+        List<Board> listBoard =  em.createQuery("select b from Board b", Board.class).getResultList();
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+        for(Board b:listBoard){
+            BoardDTO boardDTO = new BoardDTO();
+            boardDTO.setId(b.getId());
+            boardDTO.setCount(b.getCount());
+            boardDTO.setTitle(b.getTitle());
+            boardDTO.setContent(b.getContent());
+            boardDTO.setWritetime(b.getWritetime());
+            boardDTO.setWriter(b.getWriter());
+            boardDTOList.add(boardDTO);
+        }
+        return boardDTOList;
+    }
+
+    public List<String> showComment(ShowCommentForm showCommentForm){
 
         Board postId = findById(showCommentForm.getId())
                 .orElseThrow(() -> new IllegalStateException("해당하는 id가 없습니다."));
-        List<CommentList> result = em.createQuery(
-                "select c from CommentList c join fetch c.board b where b.id = :id", CommentList.class
+        List<String> result = em.createQuery(
+                "select c.comment from CommentList c c.board where c.board = :id", String.class
                 )
                 .setParameter("id", postId.getId()).getResultList();
 
@@ -71,7 +88,6 @@ public class BoardRepository {
         {
             throw new IllegalStateException("해당하는 댓글이 없습니다.");
         }
-
         return result;
     }
 

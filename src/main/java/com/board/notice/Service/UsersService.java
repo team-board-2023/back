@@ -42,7 +42,7 @@ public class UsersService {
 
     @Transactional
     public void join(UsersJoinForm usersJoinForm){
-        // validateDuplicateUser(usersJoinForm);
+        validateDuplicateUser(usersJoinForm);
 
         jpaUsersRepository.save(usersJoinForm);
     }

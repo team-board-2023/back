@@ -38,6 +38,6 @@ public class Board {
     @NonNull
     private String writer;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<CommentList> comments = new ArrayList<>();
 }

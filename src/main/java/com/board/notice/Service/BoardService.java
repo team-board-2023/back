@@ -1,10 +1,10 @@
 package com.board.notice.Service;
 
+import com.board.notice.DTO.BoardDTO;
 import com.board.notice.Entity.Board;
 import com.board.notice.Entity.CommentList;
 import com.board.notice.Form.BoardForm;
 import com.board.notice.Form.CommentForm;
-import com.board.notice.Form.ReturnCommentForm;
 import com.board.notice.Form.ShowCommentForm;
 import com.board.notice.Repository.BoardRepository;
 import jakarta.transaction.Transactional;
@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -30,8 +28,11 @@ public class BoardService {
         boardRepository.addComment(commentForm);
     }
     @Transactional
-    public List<CommentList> showAll(ShowCommentForm showCommentForm){
+    public List<String> showAll(ShowCommentForm showCommentForm){
        return boardRepository.showComment(showCommentForm);
+    }
+    public List<BoardDTO> showAll(){
+        return boardRepository.showAll();
     }
 
 }
