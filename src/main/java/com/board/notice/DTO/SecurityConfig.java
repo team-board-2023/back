@@ -37,6 +37,7 @@ public class SecurityConfig {
                                 .requestMatchers("/board/addComment").permitAll()
                                 .requestMatchers("/board/showComment").permitAll()
                                 .requestMatchers("/board/showAll").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
