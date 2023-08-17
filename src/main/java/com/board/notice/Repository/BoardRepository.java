@@ -2,7 +2,6 @@ package com.board.notice.Repository;
 
 import com.board.notice.Entity.Board;
 import com.board.notice.Entity.CommentList;
-import com.board.notice.Entity.Users;
 import com.board.notice.Form.BoardForm;
 import com.board.notice.Form.CommentForm;
 import com.board.notice.Form.ShowCommentForm;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -60,20 +58,21 @@ public class BoardRepository {
                 });
     }
 
-    public Map<Board, String> showComment(ShowCommentForm showCommentForm){
+    public List<CommentList> showComment(ShowCommentForm showCommentForm){
+
         Board postId = findById(showCommentForm.getId())
                 .orElseThrow(() -> new IllegalStateException("해당하는 id가 없습니다."));
         List<CommentList> result = em.createQuery(
-                "select c from CommentList c where c.board = :id", CommentList.class
+                "select c from CommentList c join fetch c.board b where b.id = :id", CommentList.class
                 )
-                .setParameter("id", postId).getResultList();
-        String comment  = result.stream().map(CommentList::getComment).findAny()
-                .orElseThrow( () -> new IllegalStateException("해당하는 id가 없습니다."));
-        Board board = result.stream().map(CommentList::getBoard).findAny()
-                .orElseThrow( () -> new IllegalStateException("해당하는 id가 없습니다."));
-        Map<Board, String> Comments = new HashMap<>();
-        Comments.put(board, comment);
-        return Comments;
+                .setParameter("id", postId.getId()).getResultList();
+
+        if(result.isEmpty())
+        {
+            throw new IllegalStateException("해당하는 댓글이 없습니다.");
+        }
+
+        return result;
     }
 
     public Optional<Board> findById(String id){

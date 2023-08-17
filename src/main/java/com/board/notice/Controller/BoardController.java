@@ -4,6 +4,7 @@ import com.board.notice.Entity.Board;
 import com.board.notice.Entity.CommentList;
 import com.board.notice.Form.BoardForm;
 import com.board.notice.Form.CommentForm;
+import com.board.notice.Form.ReturnCommentForm;
 import com.board.notice.Form.ShowCommentForm;
 import com.board.notice.Service.BoardService;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,7 +31,7 @@ public class BoardController {
     public void addComment(@RequestBody CommentForm commentForm){ boardService.addComment(commentForm); }
 
     @PostMapping("board/showComment")
-    public Map<Board, String> showComment(@RequestBody ShowCommentForm showCommentForm){
+    public List<CommentList> showComment(@RequestBody ShowCommentForm showCommentForm){
         return boardService.showAll(showCommentForm);
     }
 
